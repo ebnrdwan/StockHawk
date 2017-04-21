@@ -16,14 +16,17 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.udacity.stockhawk.R;
 import com.udacity.stockhawk.data.Contract;
+import com.udacity.stockhawk.sync.QuoteSyncJob;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 public class DetailStock extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private int position = StockAdapter.theadapterPosition;
+    String theHistory = QuoteSyncJob.StringofBuilder;
     LineChart lineChart;
     TextView t;
     List<Float> objects = Collections.EMPTY_LIST;
@@ -41,40 +44,28 @@ public class DetailStock extends AppCompatActivity implements LoaderManager.Load
         Intent intent = getIntent();
         String symbol = intent.getStringExtra("SYMBOL_CODE");
         mUri = intent.getData();
-//        Calendar from = Calendar.getInstance();
-//        Calendar to = Calendar.getInstance();
-//        from.add(Calendar.YEAR, -5); // from 5 years ago
-//        try {
-//
-//
-//            Set<String> stockPref = PrefUtils.getStocks(this);
-//            Set<String> stockCopy = new HashSet<>();
-//            stockCopy.addAll(stockPref);
-//            String[] stockArray = stockPref.toArray(new String[stockPref.size()]);
-//            Map<String, Stock> quotes = YahooFinance.get(stockArray);
-//            Stock stockObject = quotes.get(symbol);
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.add(Calendar.YEAR, -1); // from 5 years ago
+        try {
+
+//            Stock stockObject = YahooFinance.get(symbol);
 //            List<HistoricalQuote> history = stockObject.getHistory(from, to, Interval.WEEKLY);
-//
-//            objects = new ArrayList<>();
-//
-//            for (int i = 0; i < history.size(); i++) {
-//                objects.add(Float.valueOf(String.valueOf(history.get(i))));
-//            }
-//
-//
-//             t = (TextView) findViewById(R.id.textView);
-//
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+            objects = new ArrayList<>();
+            String[] splitArray = theHistory.split("\n");
+
+            for (int i = 0; i < splitArray.length; i++) {
+                objects.add(Float.valueOf(String.valueOf(splitArray[i])));
+            }
+
+            t = (TextView) findViewById(R.id.textView);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getSupportLoaderManager().initLoader(ID_DETAIL_LOADER, null, this);
         List<Float> mylistobjects = new ArrayList<>();
-        mylistobjects.add(3.3f);
-        mylistobjects.add(4.3f);
-        mylistobjects.add(5.3f);
-        mylistobjects.add(3.3f);
-        mylistobjects.add(7.3f);
+        mylistobjects = objects;
         List<Entry> entries = new ArrayList<Entry>();
         for (int i = 0; i < mylistobjects.size(); i++) {
             Float object = mylistobjects.get(i);

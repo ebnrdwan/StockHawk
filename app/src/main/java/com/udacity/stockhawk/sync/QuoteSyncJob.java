@@ -105,11 +105,12 @@ public final class QuoteSyncJob {
                         StringBuilder historyBuilder = new StringBuilder();
 
                         for (HistoricalQuote it : history) {
-                            historyBuilder.append(it.getDate().getTimeInMillis());
-                            historyBuilder.append(", ");
+//                            historyBuilder.append(it.getDate().getTimeInMillis());
+//                            historyBuilder.append(", ");
                             historyBuilder.append(it.getClose());
                             historyBuilder.append("\n");
                         }
+                        StringofBuilder = historyBuilder.toString();
 
                         if (price != null && !symbol.equals(null) && percentChange != null && change != null && !historyBuilder.toString().equals(null)) {
                             ContentValues quoteCV = new ContentValues();
